@@ -1,20 +1,15 @@
 package com.bakhus.note
 
 import com.bakhus.note.data.checkPasswordForEmail
-import com.bakhus.note.data.collections.User
-import com.bakhus.note.data.registerUser
 import com.bakhus.note.routes.loginRoute
+import com.bakhus.note.routes.noteRoutes
 import com.bakhus.note.routes.registerRoute
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.auth.basic
 import io.ktor.features.*
 import io.ktor.gson.*
-import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.routing.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -22,19 +17,20 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
+    install(Authentication) {
+        configureAuth()
+    }
     install(DefaultHeaders)
     install(CallLogging)
-    install(Routing) {
-        registerRoute()
-        loginRoute()
-    }
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
         }
     }
-    install(Authentication) {
-        configureAuth()
+    install(Routing) {
+        registerRoute()
+        loginRoute()
+        noteRoutes()
     }
 }
 
@@ -44,11 +40,13 @@ private fun Authentication.Configuration.configureAuth() {
         realm = "Ktor Note Server"
         validate { credentials ->
             val email = credentials.name
-            val password = credentials.name
+            val password = credentials.password
             if (checkPasswordForEmail(email, password)) {
                 UserIdPrincipal(email)
             } else null
         }
     }
 }
+
+
 
