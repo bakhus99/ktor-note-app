@@ -2,6 +2,7 @@ package com.bakhus.note
 
 import com.bakhus.note.data.collections.User
 import com.bakhus.note.data.registerUser
+import com.bakhus.note.routes.loginRoute
 import com.bakhus.note.routes.registerRoute
 import io.ktor.application.*
 import io.ktor.features.*
@@ -23,6 +24,7 @@ fun Application.module(testing: Boolean = false) {
     install(CallLogging)
     install(Routing){
         registerRoute()
+        loginRoute()
     }
     install(ContentNegotiation){
         gson {
