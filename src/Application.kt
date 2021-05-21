@@ -34,7 +34,6 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-
 private fun Authentication.Configuration.configureAuth() {
     basic {
         realm = "Ktor Note Server"
