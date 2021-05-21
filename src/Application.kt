@@ -2,6 +2,7 @@ package com.bakhus.note
 
 import com.bakhus.note.data.collections.User
 import com.bakhus.note.data.registerUser
+import com.bakhus.note.routes.registerRoute
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
@@ -20,20 +21,15 @@ fun Application.module(testing: Boolean = false) {
 
     install(DefaultHeaders)
     install(CallLogging)
-    install(Routing)
+    install(Routing){
+        registerRoute()
+    }
     install(ContentNegotiation){
         gson {
             setPrettyPrinting()
         }
     }
-    CoroutineScope(Dispatchers.IO).launch{
-    registerUser(
-        User(
-            "abc@test.com",
-            "12345"
-        )
-    )
-    }
+
 
 }
 
