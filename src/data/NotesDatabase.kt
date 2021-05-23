@@ -2,6 +2,7 @@ package com.bakhus.note.data
 
 import com.bakhus.note.data.collections.Note
 import com.bakhus.note.data.collections.User
+import com.bakhus.note.security.checkHashForPassword
 import org.litote.kmongo.contains
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.eq
@@ -23,7 +24,7 @@ suspend fun checkIfUsersExist(email: String): Boolean {
 
 suspend fun checkPasswordForEmail(email: String, passwordToCheck: String): Boolean {
     val actualPassword = users.findOne(User::email eq email)?.password ?: return false
-    return actualPassword == passwordToCheck
+    return checkHashForPassword(passwordToCheck,actualPassword)
 }
 
 suspend fun getNotesForUser(email: String): List<Note> {
