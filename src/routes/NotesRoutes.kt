@@ -52,7 +52,6 @@ fun Route.noteRoutes() {
             post {
                 val note = try {
                     call.receive<Note>()
-
                 } catch (e: ContentTransformationException) {
                     call.respond(BadRequest)
                     return@post
