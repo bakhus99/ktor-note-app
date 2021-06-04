@@ -7,7 +7,6 @@ import com.bakhus.note.data.requests.AccountRequest
 import com.bakhus.note.data.responses.SimplerResponse
 import com.bakhus.note.security.getHashWithSalt
 import io.ktor.application.*
-import io.ktor.http.*
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.request.*
@@ -15,7 +14,6 @@ import io.ktor.response.*
 import io.ktor.routing.*
 
 fun Route.registerRoute() {
-
     route("/register") {
         post {
             val request = try {
@@ -28,7 +26,6 @@ fun Route.registerRoute() {
             if (!userExists) {
                 if (registerUser(User(request.email, getHashWithSalt(request.password)))) {
                     call.respond(OK, SimplerResponse(true, "Successfully created account"))
-
                 } else {
                     call.respond(OK, SimplerResponse(false, "An unknown error occured"))
                 }
